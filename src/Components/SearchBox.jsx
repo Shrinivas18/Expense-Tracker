@@ -4,7 +4,6 @@ import { debounce } from "lodash";
 function SearchBox({ searchItem, setSearchItem }) {
   const [iconClicked, setIconClicked] = useState(false);
 
-  // debounced function
   const debouncedSetSearch = useMemo(
     () =>
       debounce((value) => {
@@ -13,7 +12,6 @@ function SearchBox({ searchItem, setSearchItem }) {
     [setSearchItem]
   );
 
-  // Cleanup debounce on unmount
   React.useEffect(() => {
     return () => {
       debouncedSetSearch.cancel();

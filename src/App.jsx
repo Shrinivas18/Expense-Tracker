@@ -5,6 +5,7 @@ import ExpenseForm from "./Components/ExpenseForm";
 import ExpenseTable from "./Components/ExpenseTable";
 import SideBar from "./Components/SideBar";
 import TopBar from "./Components/TopBar";
+import Menu from "./Components/Menu";
 
 function App() {
   return (
@@ -14,9 +15,12 @@ function App() {
         <SideBar />
         <div className="shadow-xl p-5 w-[100%] overflow-y-auto h-screen">
           <Routes>
-            <Route path="/" element={<Budget />} />
+            <Route path="/" element={<Menu />}>
+              Menu
+            </Route>
+            <Route path="/budget" element={<Budget />} />
             <Route
-              path="/expenses"
+              path="/expenseBuilder"
               element={
                 <>
                   <ExpenseForm />
@@ -24,8 +28,8 @@ function App() {
                 </>
               }
             />
-            <Route path="/menu3" element={<Budget />} />
-            <Route path="/menu4" element={<Budget />} />
+            <Route path="/expenseHistory" element={<Budget />} />
+            <Route path="/about" element={<Budget />} />
           </Routes>
         </div>
       </div>

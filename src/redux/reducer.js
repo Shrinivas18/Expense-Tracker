@@ -1,10 +1,11 @@
-import {
+import { SAVE_BUDGET,
   ADD_EXPENSE,
   DELETE_EXPENSE,
   PATCH_EXPENSE,
-  SET_BUDGET,
   UPDATE_EXPENSE,
-} from "./actions";
+  UPDATE_BUDGET,
+  SET_NEW_BUDGET,
+} from "../commons/constants";
 
 const initialState = {
   budget: 0,
@@ -16,12 +17,17 @@ const initialState = {
 
 export const expenseReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_BUDGET:
+    case SAVE_BUDGET:
       return {
         ...state,
-        budget: action.payload.budget,
-        // totalExpense: action.payload.totalExpense,
-        // remaining: action.payload.remaining,
+        budget:action.payload,
+        remaining: action.payload,
+      };
+    case SET_NEW_BUDGET:
+      return {
+        ...state,
+        budget:action.payload,
+        remaining: action.payload,
       };
     case ADD_EXPENSE:
       return {
