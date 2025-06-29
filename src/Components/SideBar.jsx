@@ -27,7 +27,7 @@ function SideBar() {
           alt="Expend Navigation Bar"
         />
         {showSideBar && (
-          <nav className="flex flex-row flex-wrap lg:flex-col lg:gap-5 max-lg:gap-4 text-md w-full ">
+          <nav className="flex flex-row flex-wrap lg:flex-col lg:gap-5 max:lg:p-0 max-lg:gap-2 text-md w-full">
             <NavLink className={getLinkClasses} to="/">
               Dashboard
             </NavLink>

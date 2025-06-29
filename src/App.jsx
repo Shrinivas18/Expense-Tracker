@@ -5,7 +5,7 @@ import ExpenseForm from "./Components/ExpenseForm";
 import ExpenseTable from "./Components/ExpenseTable";
 import SideBar from "./Components/SideBar";
 import TopBar from "./Components/TopBar";
-import Menu from "./Components/Menu";
+import Dashboard from "./Components/Dashboard";
 
 function App() {
   return (
@@ -15,8 +15,8 @@ function App() {
         <SideBar />
         <div className="shadow-xl p-5 w-[100%] overflow-y-auto h-screen">
           <Routes>
-            <Route path="/" element={<Menu />}>
-              Menu
+            <Route path="/" element={<Dashboard />}>
+              Dashboard
             </Route>
             <Route path="/budget" element={<Budget />} />
             <Route

@@ -3,13 +3,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { addExpense, updateExpense } from "../redux/actions";
 import { v4 as uuid } from "uuid";
 import { calculateTotalExpense } from "../commons/budgetCalculation";
+import { transformDate } from "../commons/transformDate";
+import { transformTime } from "../commons/transformTime";
 
 function ExpenseForm() {
   const [formData, setFormData] = useState({
     id: "",
     description: "",
+    category: "",
     amount: "",
-    category: "other",
+    paidTo: "",
+    date: "",
+    time: "",
+    comment: "",
   });
 
   const [isEdit, setIsEdit] = useState(false);
@@ -21,7 +27,6 @@ function ExpenseForm() {
   const budgetValue = useSelector((state) => state.budget);
   const editExpense = useSelector((state) => state.editExpenseData);
   const expenses = useSelector((state) => state.expenses);
-  console.log("budgetValue", budgetValue);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -37,8 +42,6 @@ function ExpenseForm() {
     setSumOfExpenses(newSum);
     const newLimit = limit - Number(formData.amount);
     setLimit(newLimit);
-    console.log("limit:::", newLimit);
-    console.log(newSum);
     if (editExpense) {
       dispatch(updateExpense(formData));
       setIsEdit(false);
@@ -52,6 +55,10 @@ function ExpenseForm() {
       description: "",
       amount: "",
       category: "other",
+      paidTo: "",
+      comment: "",
+      date: transformDate(),
+      time: transformTime(),
     });
   };
 
@@ -66,9 +73,19 @@ function ExpenseForm() {
     setLimit(budgetValue);
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFormData((prev) => ({
+        ...prev,
+        date: transformDate(),
+        time: transformTime(),
+      }));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
   return (
     <div>
-      <h1 className="text-3xl font-bold max-md:text-2xl">Expenses</h1>
+      <h1 className="text-3xl font-bold max-md:text-2xl">Manage Expenses</h1>
       <div className="bg-white mt-5 shadow-md rounded-lg ">
         <form
           className="grid grid-cols-4 pl-7 pr-7 pt-7 pb-4 gap-2 max-md:flex max-md:flex-col max-md:gap-2 max-md:p-4"
@@ -99,12 +116,48 @@ function ExpenseForm() {
             onChange={handleChange}
             required
           >
-            <option value="other">Other</option>
+            <option value="">Select Category</option>
             <option value="food">Food</option>
             <option value="transportation">Transportation</option>
             <option value="entertainment">Entertainment</option>
             <option value="utilities">Utilities</option>
+            <option value="other">Other</option>
           </select>
+          <input
+            className="border p-2 rounded-md shadow-md"
+            name="paidTo"
+            value={formData.paidTo}
+            onChange={handleChange}
+            type="text"
+            placeholder="Amount paid to"
+            required
+          />
+          <input
+            className="border p-2 rounded-md shadow-md"
+            name="date"
+            value={formData.date}
+            onChange={handleChange}
+            type="text"
+            disabled
+            required
+          />
+          <input
+            className="border p-2 rounded-md shadow-md"
+            name="time"
+            value={formData.time}
+            onChange={handleChange}
+            type="text"
+            disabled
+            required
+          />
+          <textarea
+            className="border p-2 rounded-md shadow-md h-[44px]"
+            name="comment"
+            value={formData.comment}
+            onChange={handleChange}
+            placeholder="Add comment here..."
+            required
+          />
           <button
             type="submit"
             className="bg-green-500 hover:bg-green-600 text-white rounded-md shadow-lg cursor-pointer max-md:p-2"
