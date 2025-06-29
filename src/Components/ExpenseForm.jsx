@@ -54,7 +54,7 @@ function ExpenseForm() {
       id: "",
       description: "",
       amount: "",
-      category: "other",
+      category: "",
       paidTo: "",
       comment: "",
       date: transformDate(),
@@ -88,7 +88,7 @@ function ExpenseForm() {
       <h1 className="text-3xl font-bold max-md:text-2xl">Manage Expenses</h1>
       <div className="bg-white mt-5 shadow-md rounded-lg ">
         <form
-          className="grid grid-cols-4 pl-7 pr-7 pt-7 pb-4 gap-2 max-md:flex max-md:flex-col max-md:gap-2 max-md:p-4"
+          className="grid grid-cols-4 items-start pl-7 pr-7 pt-7 pb-4 gap-2 max-md:flex max-md:flex-col max-md:gap-2 max-md:p-4"
           onSubmit={handleSubmit}
         >
           <input
@@ -151,12 +151,11 @@ function ExpenseForm() {
             required
           />
           <textarea
-            className="border p-2 rounded-md shadow-md h-[44px]"
+            className="border p-2 rounded-md shadow-md resize-y h-[44px] min-h-[44px]"
             name="comment"
             value={formData.comment}
             onChange={handleChange}
             placeholder="Add comment here..."
-            required
           />
           <button
             type="submit"
