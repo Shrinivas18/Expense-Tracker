@@ -54,7 +54,7 @@ function ExpenseForm() {
       id: "",
       description: "",
       amount: "",
-      category: "other",
+      category: "",
       paidTo: "",
       comment: "",
       date: transformDate(),
@@ -151,12 +151,11 @@ function ExpenseForm() {
             required
           />
           <textarea
-            className="border p-2 rounded-md shadow-md h-[44px]"
+            className="border p-2 rounded-md shadow-md h-[44px] resize-none"
             name="comment"
             value={formData.comment}
             onChange={handleChange}
             placeholder="Add comment here..."
-            required
           />
           <button
             type="submit"

@@ -13,7 +13,7 @@ import {
 } from "recharts";
 import barchart from "../assets/bar-chart.png";
 
-const COLORS = ["#FF7A7A", "#FFB366", "#7B68EE", "#5DADE2", "#6BCAA6"];
+const COLORS = ["#7B68EE", "#FF7A7A", "#FFB366", "#5DADE2", "#6BCAA6"];
 
 function Barchart() {
   const expenses = useSelector((state) => state.expenses) || [];

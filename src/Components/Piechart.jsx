@@ -10,7 +10,7 @@ import {
 } from "recharts";
 import donutchart from "../assets/donut-chart.png";
 
-const COLORS = ["#FF7A7A", "#FFB366", "#7B68EE", "#5DADE2", "#6BCAA6"];
+const COLORS = ["#7B68EE", "#FF7A7A", "#FFB366", "#5DADE2", "#6BCAA6"];
 function Piechart() {
   const expenses = useSelector((state) => state.expenses) || [];
 
