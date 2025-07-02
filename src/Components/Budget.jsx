@@ -29,7 +29,7 @@ function Budget() {
         setBudgetStored(false);
         break;
       default:
-        setBudgetStored(false);
+        setBudgetStored(true);
     }
     if (actionType === SET_NEW_BUDGET) {
       setBudgetAmount("");
