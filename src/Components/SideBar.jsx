@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import rightArrow from "../assets/right-arrow.png";
-import menu from "../assets/menu.png";
 import { NavLink } from "react-router-dom";
 
 function SideBar() {
@@ -24,7 +23,7 @@ function SideBar() {
           className="lg:size-4 max-lg:size-4 cursor-pointer max-lg:mt-3"
           title="Navigation Bar"
           onClick={() => setShowSideBar(!showSideBar)}
-          src={menu}
+          src={rightArrow}
           alt="Expend Navigation Bar"
         />
         {showSideBar && (
@@ -41,9 +40,9 @@ function SideBar() {
             <NavLink className={getLinkClasses} to="/expenseHistory">
               Expense History
             </NavLink>
-            {/* <NavLink className={getLinkClasses} to="/about">
+            <NavLink className={getLinkClasses} to="/about">
               About
-            </NavLink> */}
+            </NavLink>
           </nav>
         )}
       </div>

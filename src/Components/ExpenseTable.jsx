@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteExpense, patchExpense } from "../redux/actions";
 import SearchBox from "./SearchBox";
 import { MoreVertical, Edit, Trash2 } from "lucide-react";
+import { ClipLoader } from "react-spinners";
 
 function ExpenseTable() {
   const expenses = useSelector((state) => state.expenses);
@@ -13,15 +14,34 @@ function ExpenseTable() {
   const itemsPerPage = 5;
   const dropdownRef = useRef(null);
 
+  const [loadingId, setLoadingId] = useState(null);
+  const [error, setError] = useState(null);
+
   const patchData = (id) => {
     const data = expenses.find((expense) => expense.id === id);
-    dispatch(patchExpense(data));
-    setOpenDropdown(null);
+    try {
+      setLoadingId(id);
+      dispatch(patchExpense(data));
+      setOpenDropdown(null);
+    } catch (err) {
+      console.error("Patch failed:", err);
+      setError("Failed to update expense.");
+    } finally {
+      setLoadingId(null);
+    }
   };
 
   const deleteData = (id) => {
-    dispatch(deleteExpense(id));
-    setOpenDropdown(null);
+    try {
+      setLoadingId(id);
+      dispatch(deleteExpense(id));
+      setOpenDropdown(null);
+    } catch (err) {
+      console.error("Delete failed:", err);
+      setError("Failed to delete expense.");
+    } finally {
+      setLoadingId(null);
+    }
   };
 
   const toggleDropdown = (id) => {
@@ -97,20 +117,28 @@ function ExpenseTable() {
                     </button>
                     {openDropdown === item.id && (
                       <div className="absolute left-0 top-full mt-1 w-32 bg-white border border-gray-200 rounded-lg shadow-lg z-10 py-1">
-                        <button
-                          onClick={() => patchData(item.id)}
-                          className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
-                        >
-                          <Edit className="w-4 h-4 text-blue-500" />
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => deleteData(item.id)}
-                          className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
-                        >
-                          <Trash2 className="w-4 h-4 text-red-500" />
-                          Delete
-                        </button>
+                        {loadingId ? (
+                          <span lassName="fixed inset-0 z-50 bg-black bg-opacity-40 flex items-center justify-center">
+                            <ClipLoader size={80} color="#ffffff" />
+                          </span>
+                        ) : (
+                          <>
+                            <button
+                              onClick={() => patchData(item.id)}
+                              className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                            >
+                              <Edit className="w-4 h-4 text-blue-500" />
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => deleteData(item.id)}
+                              className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                            >
+                              <Trash2 className="w-4 h-4 text-red-500" />
+                              Delete
+                            </button>
+                          </>
+                        )}
                       </div>
                     )}
                   </div>
@@ -190,6 +218,12 @@ function ExpenseTable() {
           </div>
         )}
       </div>
+
+      {error && (
+        <div>
+          <h1 className="text-red-600">Something went wrong!!!</h1>
+        </div>
+      )}
     </div>
   );
 }

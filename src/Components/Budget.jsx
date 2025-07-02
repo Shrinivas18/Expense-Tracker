@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setBudget } from "../redux/actions";
+import { setBudget, setIsBudgetStored } from "../redux/actions";
 import Piechart from "./Piechart";
 import Barchart from "./Barchart";
 import {
@@ -12,30 +12,24 @@ import {
 function Budget() {
   const dispatch = useDispatch();
   const currState = useSelector((state) => state);
+  console.log(currState);
+  const isBudgetStored = useSelector((state) => state.isBudgetStored);
 
-  const [budgetStored, setBudgetStored] = useState(false);
-  const [budgetAmount, setBudgetAmount] = useState("");
+  const [budgetAmount, SetBudgetAmount] = useState("");
 
   const handleSubmit = (actionType) => {
-    const disabled = false;
-    switch (actionType) {
-      case SAVE_BUDGET:
-        setBudgetStored(true);
-        break;
-      case UPDATE_BUDGET:
-        setBudgetStored(false);
-        break;
-      case SET_NEW_BUDGET:
-        setBudgetStored(false);
-        break;
-      default:
-        setBudgetStored(true);
-    }
+    console.log(actionType);
     if (actionType === SET_NEW_BUDGET) {
-      setBudgetAmount("");
+      dispatch(setIsBudgetStored(false));
       dispatch(setBudget(0, actionType));
+      SetBudgetAmount("");
+    } else if (actionType === UPDATE_BUDGET) {
+      dispatch(setIsBudgetStored(false));
+      SetBudgetAmount("");
     } else {
       dispatch(setBudget(budgetAmount, actionType));
+      dispatch(setIsBudgetStored(true));
+      SetBudgetAmount("");
     }
   };
 
@@ -52,12 +46,12 @@ function Budget() {
             placeholder="Set your budget amount here..."
             className="w-[90%] mr-5 border rounded-lg px-4 shadow-md max-md:p-2 max-md:w-[100%]"
             value={budgetAmount}
-            onChange={(e) => setBudgetAmount(e.target.value)}
-            disabled={budgetStored}
-            title={budgetStored ? "Please use the buttons" : ""}
+            onChange={(e) => SetBudgetAmount(e.target.value)}
+            disabled={isBudgetStored}
+            title={isBudgetStored ? "Please use the buttons" : ""}
           />
 
-          {budgetStored ? (
+          {isBudgetStored ? (
             <div className="flex flex-row gap-1 ">
               <button
                 type="button"
@@ -85,7 +79,7 @@ function Budget() {
           )}
         </form>
 
-        {budgetStored && (
+        {isBudgetStored && (
           <span className="flex-col flex-wrap p-2 text-red-300">
             Please use buttons to update or set new budget amount.
           </span>

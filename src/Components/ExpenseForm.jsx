@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addExpense, updateExpense } from "../redux/actions";
-import { v4 as uuid } from "uuid";
-import { calculateTotalExpense } from "../commons/budgetCalculation";
 import { transformDate } from "../commons/transformDate";
 import { transformTime } from "../commons/transformTime";
+
+import db from "../firebase";
+import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
+import { ClipLoader } from "react-spinners";
 
 function ExpenseForm() {
   const [formData, setFormData] = useState({
@@ -19,14 +21,14 @@ function ExpenseForm() {
   });
 
   const [isEdit, setIsEdit] = useState(false);
-  const [sumOfExpenses, setSumOfExpenses] = useState(0);
   const [limit, setLimit] = useState(0);
+  const [isLoading, setisLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const dispatch = useDispatch();
 
   const budgetValue = useSelector((state) => state.budget);
   const editExpense = useSelector((state) => state.editExpenseData);
-  const expenses = useSelector((state) => state.expenses);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -35,31 +37,45 @@ function ExpenseForm() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const newSum = calculateTotalExpense(sumOfExpenses, formData.amount);
-    setSumOfExpenses(newSum);
-    const newLimit = limit - Number(formData.amount);
-    setLimit(newLimit);
-    if (editExpense) {
-      dispatch(updateExpense(formData));
-      setIsEdit(false);
-    } else {
-      const newData = { ...formData, id: uuid() };
-      dispatch(addExpense(newData));
-    }
-
-    setFormData({
-      id: "",
-      description: "",
-      amount: "",
-      category: "",
-      paidTo: "",
-      comment: "",
+    const expenseData = {
+      ...formData,
       date: transformDate(),
       time: transformTime(),
-    });
+    };
+
+    try {
+      setisLoading(true);
+      if (editExpense) {
+        const expenseRef = doc(db, "expenses", formData.id);
+        await updateDoc(expenseRef, expenseData);
+        dispatch(updateExpense(expenseData));
+        setIsEdit(false);
+      } else {
+        const docRef = await addDoc(collection(db, "expenses"), expenseData);
+        dispatch(addExpense({ ...expenseData, id: docRef.id }));
+        setError(error);
+      }
+
+      setFormData({
+        id: "",
+        description: "",
+        amount: "",
+        category: "",
+        paidTo: "",
+        comment: "",
+        date: transformDate(),
+        time: transformTime(),
+      });
+
+      setisLoading(false);
+    } catch (error) {
+      console.error("Error adding/updating expense:", error);
+      setisLoading(false);
+      setError(error);
+    }
   };
 
   useEffect(() => {
@@ -87,6 +103,18 @@ function ExpenseForm() {
     <div>
       <h1 className="text-3xl font-bold max-md:text-2xl">Manage Expenses</h1>
       <div className="bg-white mt-5 shadow-md rounded-lg ">
+        {isLoading && (
+          <div className="fixed inset-0 z-50 bg-black bg-opacity-40 flex items-center justify-center">
+            <ClipLoader size={80} color="#ffffff" />
+          </div>
+        )}
+
+        {error && (
+          <div>
+            <h1 className="text-red-600">Something went wrong!!!</h1>
+          </div>
+        )}
+
         <form
           className="grid grid-cols-4 pl-7 pr-7 pt-7 pb-4 gap-2 max-md:flex max-md:flex-col max-md:gap-2 max-md:p-4"
           onSubmit={handleSubmit}
