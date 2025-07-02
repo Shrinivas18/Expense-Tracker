@@ -1,0 +1,9 @@
+export const SET_BUDGET = "set_budget";
+export const ADD_EXPENSE = "add_expense";
+export const PATCH_EXPENSE = "patch_expense";
+export const DELETE_EXPENSE = "delete_expense";
+export const UPDATE_EXPENSE = "update_expense";
+export const SAVE_BUDGET = "SAVE_BUDGET";
+export const UPDATE_BUDGET = "UPDATE_BUDGET";
+export const SET_NEW_BUDGET = "SET_NEW_BUDGET";
+export const IS_BUDGET_STORED = "IS_BUDGET_STORED";
