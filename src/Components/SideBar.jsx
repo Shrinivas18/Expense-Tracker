@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import rightArrow from "../assets/right-arrow.png";
+import menu from "../assets/menu.png";
+import menuOpened from "../assets/menu-opened.png";
 import { NavLink } from "react-router-dom";
 
 function SideBar() {
@@ -18,16 +19,26 @@ function SideBar() {
           : `transition-all duration-300 ease-in-out shadow-lg w-full lg:w-[5%] pt-5 max-lg:pt-1`
       }
     >
-      <div className={`flex flex-row lg:flex-col gap-4 p-2 max-lg:pb-2 pl-1`}>
-        <img
-          className="lg:size-4 max-lg:size-4 cursor-pointer max-lg:mt-3"
-          title="Navigation Bar"
-          onClick={() => setShowSideBar(!showSideBar)}
-          src={rightArrow}
-          alt="Expend Navigation Bar"
-        />
+      <div className="flex flex-row lg:flex-col gap-4 p-2 max-lg:pb-2 pl-1">
+        {showSideBar ? (
+          <img
+            className="lg:w-9 lg:h-9 max-lg:w-6 max-lg:h-6 cursor-pointer max-lg:mt-3 transition-all duration-300 ease-in-out transform"
+            title="Close Menu"
+            onClick={() => setShowSideBar(!showSideBar)}
+            src={menuOpened}
+            alt="Collapse Navigation Bar"
+          />
+        ) : (
+          <img
+            className="lg:w-6 lg:h-6 max-lg:w-6 max-lg:h-6 cursor-pointer max-lg:mt-3 transition-all duration-300 ease-in-out transform"
+            title="Open Menu"
+            onClick={() => setShowSideBar(!showSideBar)}
+            src={menu}
+            alt="Expand Navigation Bar"
+          />
+        )}
         {showSideBar && (
-          <nav className="flex flex-row flex-wrap lg:flex-col lg:gap-5 max:lg:p-0 max-lg:gap-2 text-md w-full">
+          <nav className="flex flex-row flex-wrap lg:flex-col lg:gap-5 max-md:text-[12px] max-md:gap-0 max-lg:gap-2 text-md w-full">
             <NavLink className={getLinkClasses} to="/">
               Dashboard
             </NavLink>
